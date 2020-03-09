@@ -27,7 +27,8 @@ export const parseJsonp = (jsonp: string, cbName: string) => {
   const prefixLength = cbName.length + "_Callback".length + 1;
   const suffixLength = jsonp.length - prefixLength - 2;
   const str = jsonp.substr(prefixLength, suffixLength);
-  return JSON.parse(str).data;
+  const obj = JSON.parse(str);
+  return obj.data ? obj.data : obj;
 };
 
 export const percentage = (num: number) => (num * 100).toFixed(1) + "%";

@@ -20,8 +20,11 @@ const isOnline = async (cb?: (nick: string) => void) => {
     })
   );
   const text = await resp.text();
-  const { nick } = parseJsonp(text, callbackFun);
-  cb && cb(nick);
+  const data = parseJsonp(text, callbackFun);
+  if (data.code!=0) {
+    return false;
+  }
+  cb && cb(data.nick);
   return true;
 };
 
