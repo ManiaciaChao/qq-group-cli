@@ -1,0 +1,4 @@
+node_modules
+cookie.json
+download/*
+yarn-error.log

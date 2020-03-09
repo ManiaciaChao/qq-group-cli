@@ -1,0 +1,20 @@
+{
+  "name": "qq-group-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/cli-progress": "^3.4.2",
+    "@types/pretty-bytes": "^5.2.0",
+    "@types/tough-cookie-file-store": "^1.2.0",
+    "cli-progress": "^3.6.0",
+    "pretty-bytes": "^5.3.0",
+    "qq-qr-login": "file:../qq-qr-login",
+    "tough-cookie": "^3.0.1",
+    "tough-cookie-file-store": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.0",
+    "@types/node-fetch": "^2.5.5"
+  }
+}
