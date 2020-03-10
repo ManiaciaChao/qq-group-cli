@@ -1,12 +1,12 @@
 import { join } from "path";
-import cliProgress from "cli-progress";
+import ProgressBar from "../view/progress";
 import { createWriteStream } from "fs";
 
 import { fetch } from "./fetch";
 import { downloadDir } from "../config.json";
 import { getGroupShareUrl, IGroupShare } from "./group";
 
-// import prettyBytes from "pretty-bytes";
+import prettyBytes from "pretty-bytes";
 // import { percentage } from "../utils";
 
 export const downloadFile = async (config: {
@@ -21,21 +21,26 @@ export const downloadFile = async (config: {
   const { body } = await fetch(await getGroupShareUrl(id, share));
   await new Promise((reslove, reject) => {
     // create new progress bar
-    const bar = new cliProgress.SingleBar({
-      format:
-        "{bar}" + "| {percentage}% || {value}/{total} Chunks || Speed: {speed}",
-      barCompleteChar: "\u2588",
-      barIncompleteChar: "\u2591",
-      hideCursor: true
-    });
-    bar.start(share.filesize, 0, {
-      speed: "N/A"
-    });
+    let sav = 0;
+    const bar = new ProgressBar(
+      `downloading [:bar] :percent :current/:total Rate::rate/s ETA::etas`,
+      {
+        complete: "=",
+        incomplete: " ",
+        head:">",
+        width: 20,
+        total: share.filesize,
+      }
+    );
+
     body.on("data", chunk => {
-      bar.increment(chunk.length);
+      sav += chunk.length;
+      bar.tick(chunk.length, {
+        sav: prettyBytes(sav),
+      });
     });
     body.on("end", () => {
-      bar.stop(), reslove();
+      console.log("\n"), reslove();
     });
     body.on("error", (err: Error) => reject(err));
     body.pipe(file);
