@@ -16,7 +16,7 @@ export const downloadFile = async (config: {
   onProcess?: any;
 }) => {
   const { id, path, share } = config;
-  const filepath = join(path ? path : downloadDir, share.filename);
+  const filepath = join(path ?? downloadDir, share.filename);
   const file = createWriteStream(filepath);
   const { body } = await fetch(await getGroupShareUrl(id, share));
   await new Promise((reslove, reject) => {
@@ -27,21 +27,19 @@ export const downloadFile = async (config: {
       {
         complete: "=",
         incomplete: " ",
-        head:">",
+        head: ">",
         width: 20,
-        total: share.filesize,
+        total: share.filesize
       }
     );
 
     body.on("data", chunk => {
       sav += chunk.length;
       bar.tick(chunk.length, {
-        sav: prettyBytes(sav),
+        sav: prettyBytes(sav)
       });
     });
-    body.on("end", () => {
-      console.log("\n"), reslove();
-    });
+    body.on("end", () => reslove());
     body.on("error", (err: Error) => reject(err));
     body.pipe(file);
   });

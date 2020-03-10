@@ -1,6 +1,5 @@
 import { jar } from "../model/cookies";
 import { withQuery, parseJsonp } from "../utils";
-import { uin } from "../config.json";
 import { getACSRFToken } from "./token";
 import { fetch } from "./fetch";
 import { createWriteStream, PathLike } from "fs";
@@ -87,7 +86,6 @@ interface IGroupShareFileInfo {
 export const getGroupsList = async () => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/get_group_list", {
-      uin,
       random: Math.random(),
       g_tk: getACSRFToken()
     })
@@ -106,7 +104,6 @@ export const getGroupInfo = async (id: number) => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/get_group_member", {
       callbackFun,
-      uin,
       groupid: id,
       neednum: "1",
       r: Math.random(),
@@ -122,7 +119,6 @@ export const getGroupShareCount = async (id: number) => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/get_group_share_info", {
       groupid: id,
-      uin,
       callbackFun,
       t: Math.random(),
       g_tk: getACSRFToken()
@@ -136,7 +132,6 @@ export const getGroupShareCount = async (id: number) => {
 export const getGroupShareInfo = async (id: number) => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/group_share_list", {
-      uin,
       groupid: id,
       bussinessid: "0", // unknown
       r: Math.random(),
@@ -159,7 +154,6 @@ export const getGroupShareFileInfo = async (
 ) => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/group_share_get_downurl", {
-      uin,
       groupid: id,
       pa: filepath,
       r: Math.random(),

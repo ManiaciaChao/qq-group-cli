@@ -1,6 +1,6 @@
 {
-  "uin": "1234567890",
-  "downloadDir":"./download",
+  "downloadDir": "./download",
+  "select": null,
   "site": {
     "appid": "549000912",
     "daid": "5",

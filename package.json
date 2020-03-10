@@ -1,14 +1,23 @@
 {
   "name": "qq-group-cli",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "author": {
+    "name": "manicata"
+  },
   "license": "MIT",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "tsc"
+  },
   "dependencies": {
     "@types/cli-progress": "^3.4.2",
     "@types/pretty-bytes": "^5.2.0",
     "@types/progress": "^2.0.3",
     "@types/tough-cookie-file-store": "^1.2.0",
+    "chalk": "^3.0.0",
     "cli-progress": "^3.6.0",
+    "meow": "^6.0.1",
     "pretty-bytes": "^5.3.0",
     "progress": "^2.0.3",
     "qq-qr-login": "file:../qq-qr-login",

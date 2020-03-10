@@ -4,35 +4,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
-const cli_progress_1 = __importDefault(require("cli-progress"));
+const progress_1 = __importDefault(require("../view/progress"));
 const fs_1 = require("fs");
 const fetch_1 = require("./fetch");
 const config_json_1 = require("../config.json");
 const group_1 = require("./group");
-// import prettyBytes from "pretty-bytes";
+const pretty_bytes_1 = __importDefault(require("pretty-bytes"));
 // import { percentage } from "../utils";
 exports.downloadFile = async (config) => {
     const { id, path, share } = config;
-    const filepath = path_1.join(path ? path : config_json_1.downloadDir, share.filename);
+    const filepath = path_1.join(path !== null && path !== void 0 ? path : config_json_1.downloadDir, share.filename);
     const file = fs_1.createWriteStream(filepath);
     const { body } = await fetch_1.fetch(await group_1.getGroupShareUrl(id, share));
     await new Promise((reslove, reject) => {
         // create new progress bar
-        const bar = new cli_progress_1.default.SingleBar({
-            format: "{bar}" + "| {percentage}% || {value}/{total} Chunks || Speed: {speed}",
-            barCompleteChar: "\u2588",
-            barIncompleteChar: "\u2591",
-            hideCursor: true
-        });
-        bar.start(share.filesize, 0, {
-            speed: "N/A"
+        let sav = 0;
+        const bar = new progress_1.default(`downloading [:bar] :percent :current/:total Rate::rate/s ETA::etas`, {
+            complete: "=",
+            incomplete: " ",
+            head: ">",
+            width: 20,
+            total: share.filesize
         });
         body.on("data", chunk => {
-            bar.increment(chunk.length);
+            sav += chunk.length;
+            bar.tick(chunk.length, {
+                sav: pretty_bytes_1.default(sav)
+            });
         });
-        body.on("end", () => {
-            bar.stop(), reslove();
-        });
+        body.on("end", () => reslove());
         body.on("error", (err) => reject(err));
         body.pipe(file);
     });

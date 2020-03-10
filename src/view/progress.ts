@@ -9,7 +9,7 @@ export default class ProgressBar extends OriginProgressBar {
   lastRender = -Infinity;
   renderThrottle = 0;
   start = Date.now();
-  width:number;
+  width: number;
   fmt: string;
   chars = {
     complete: "=",
@@ -20,7 +20,8 @@ export default class ProgressBar extends OriginProgressBar {
   constructor(format: string, options: ProgressBar.ProgressBarOptions) {
     super(format, options);
     this.fmt = format;
-    this.width = options.width || this.total
+    this.width = options.width || this.total;
+    this.chars = { ...this.chars, ...options };
   }
   render(tokens?: any, force?: any) {
     force = force !== undefined ? force : false;

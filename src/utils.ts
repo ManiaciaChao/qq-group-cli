@@ -32,3 +32,28 @@ export const parseJsonp = (jsonp: string, cbName: string) => {
 };
 
 export const percentage = (num: number) => (num * 100).toFixed(1) + "%";
+
+interface IPagerConfig {
+  page?: number;
+  size?: number;
+  all?: boolean;
+}
+
+export const pager = (list: any[],config: IPagerConfig) => {
+  if (config?.all) {
+    return list;
+  } else {
+    const size = config.size ?? 10;
+    const page = config.page ?? 1;
+    let start = (page - 1) * size;
+    if (start >= list.length) {
+      start = list.length - size;
+    }
+    return list.slice(start, start + size);
+  }
+};
+
+export const time = (timestamp: number) =>
+  new Date(timestamp * 1000).toLocaleString();
+
+export const numPad = (num:number,pad:number)=>num.toString().padEnd(4)

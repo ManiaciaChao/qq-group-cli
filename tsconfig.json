@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "outDir":"dist",
-    "baseUrl": ".",
-    // "rootDir": "src"
   }
 }

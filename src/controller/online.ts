@@ -1,6 +1,5 @@
 import { jar } from "../model/cookies";
 import { withQuery, parseJsonp } from "../utils";
-import { uin } from "../config.json";
 import { getACSRFToken } from "./token";
 import { fetch, login } from "./fetch";
 
@@ -12,7 +11,6 @@ const isOnline = async (cb?: (nick: string) => void) => {
   const resp = await fetch(
     withQuery("http://qun.qzone.qq.com/cgi-bin/get_group_member", {
       callbackFun,
-      uin,
       groupid: "0",
       neednum: "1",
       r: Math.random(),
@@ -22,7 +20,7 @@ const isOnline = async (cb?: (nick: string) => void) => {
   const text = await resp.text();
   const data = parseJsonp(text, callbackFun);
   console.log(data);
-  if (data.code && data.code != 0) {
+  if (data?.code != 0) {
     return false;
   }
   cb && cb(data.nick);
