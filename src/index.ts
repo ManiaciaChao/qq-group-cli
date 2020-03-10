@@ -5,11 +5,12 @@ import { downloadFile } from "./controller/download";
 
 (async () => {
   await ensureOnline();
-  // console.log(await getGroupsList());
-  const groupInfo = await getGroupInfo(829709717)
+  const groupsList =await getGroupsList();
+  console.log(groupsList[0]);
+  const groupInfo = await getGroupInfo(groupsList[0].id)
   console.log(groupInfo);
-  const groupShareList = await getGroupShareList(829709717);
+  const groupShareList = await getGroupShareList(groupsList[0].id);
   const file = groupShareList[0];
   console.log(file);
-  await downloadFile({id:829709717,share:file})
+  await downloadFile({id:groupsList[0].id,share:file})
 })();

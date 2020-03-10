@@ -21,7 +21,8 @@ const isOnline = async (cb?: (nick: string) => void) => {
   );
   const text = await resp.text();
   const data = parseJsonp(text, callbackFun);
-  if (data.code!=0) {
+  console.log(data);
+  if (data.code && data.code != 0) {
     return false;
   }
   cb && cb(data.nick);
