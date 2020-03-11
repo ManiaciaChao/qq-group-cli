@@ -60,7 +60,11 @@ actions.register("group", "list", async flags => {
 });
 actions.register("group", "info", async flags => {
   const { group } = flags;
-  const info = await getGroupInfo(select ?? group);
+  const id = select ?? group;
+  if (!id) {
+    console.log("Invalid selection!");
+  }
+  const info = await getGroupInfo(id);
   const admins = info.item
     .filter(({ iscreator, ismanager }) => iscreator || ismanager)
     .map(
@@ -69,9 +73,8 @@ actions.register("group", "info", async flags => {
           ismanager ? green("管理") : ""
         } ${nick} ${uin}`
     );
-  console.log(info);
   console.log(`群名: ${green(info.group_name)}`);
-  console.log(`群号: ${select ?? group}`);
+  console.log(`群号: ${id}`);
   console.log(`简介: ${info.finger_memo || "无"}`);
   console.log(`公告: ${info.group_memo}`);
   console.log(`人数: ${info.total}`);
@@ -132,11 +135,11 @@ actions.register("share", "down", download);
 async function download(flags: Flags) {
   const { group, all, dest } = flags;
   const path = dest ? parsePath(dest) : undefined;
-  if (!group) {
+  const id = select ?? group;
+  if (!id) {
     console.log("Invalid selection!");
   }
-  const id = select ?? group;
-  const list = await getGroupShareList(select ?? group);
+  const list = await getGroupShareList(id);
   const multibar = new MultiBar({
     hideCursor: true,
     format: customFormatter

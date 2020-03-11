@@ -1,7 +1,9 @@
+import { normalize } from "path";
 import { CookieJar, Cookie } from "tough-cookie";
 import FileCookieStore from "tough-cookie-file-store";
 
-export const store = new FileCookieStore("./cookie.json");
+const path = normalize(__dirname+"/../cookie.json");
+export const store = new FileCookieStore(path);
 export const jar = new CookieJar(store);
 
 export const cleanCookies = () => {

@@ -1,6 +1,7 @@
-import {join} from "path"
-import {homedir} from "os"
+import { join } from "path";
+import { homedir } from "os";
 import { format } from "url";
+import { mkdirSync, existsSync } from "fs";
 import { CookieJar } from "tough-cookie";
 
 export const sleep = (ms: number) =>
@@ -33,14 +34,19 @@ export const parseJsonp = (jsonp: string, cbName: string) => {
   return obj.data ? obj.data : obj;
 };
 
-
-export const parsePath = (path:string)=>{
+export const parsePath = (path: string) => {
   const splited = path.split(/[\\/]/g);
   if (splited[0] === "~") {
-    splited[0] = homedir()
+    splited[0] = homedir();
   }
-  return join(...splited)
-}
+  return join(...splited);
+};
+
+export const mkdir = (path: string) => {
+  if (!existsSync(path)) {
+    mkdirSync(path, { recursive: true });
+  }
+};
 
 export const percentage = (num: number) => (num * 100).toFixed(1) + "%";
 

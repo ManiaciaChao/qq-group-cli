@@ -1,6 +1,7 @@
-import { join } from "path";
+import { join, normalize } from "path";
 import { createWriteStream } from "fs";
 import { fetch } from "./fetch";
+import { mkdir } from "../utils";
 import { downloadDir } from "../config.json";
 import { getGroupShareUrl, IGroupShare } from "./group";
 
@@ -13,8 +14,10 @@ export const downloadFile = async (config: {
   onData?: (chunk: Chunk) => void;
 }) => {
   const { id, path, share, onData } = config;
-  const defaultPath = join(downloadDir, id.toString());
-  const filepath = join(path ?? defaultPath, share.filename);
+  const finalPath =
+    path ?? join(normalize(__dirname + "/../../" + downloadDir), id.toString());
+  mkdir(finalPath);
+  const filepath = join(finalPath, share.filename);
   const file = createWriteStream(filepath);
   const { body } = await fetch(await getGroupShareUrl(id, share));
   await new Promise((reslove, reject) => {

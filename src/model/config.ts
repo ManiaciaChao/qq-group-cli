@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import config from "../config.json";
 
 const location = join(__dirname, "../config.json");
+console.log(location)
 
 export const set = (key: string, value: any = null) => {
   const newConfig = {

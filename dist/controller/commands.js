@@ -36,13 +36,16 @@ actions.register("group", "list", async (flags) => {
 });
 actions.register("group", "info", async (flags) => {
     const { group } = flags;
-    const info = await group_1.getGroupInfo(config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group);
+    const id = config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group;
+    if (!id) {
+        console.log("Invalid selection!");
+    }
+    const info = await group_1.getGroupInfo(id);
     const admins = info.item
         .filter(({ iscreator, ismanager }) => iscreator || ismanager)
         .map(({ nick, uin, iscreator, ismanager }, index) => `${utils_1.numPad(index, 4)} ${iscreator ? chalk_1.yellow("群主") : ""}${ismanager ? chalk_1.green("管理") : ""} ${nick} ${uin}`);
-    console.log(info);
     console.log(`群名: ${chalk_1.green(info.group_name)}`);
-    console.log(`群号: ${config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group}`);
+    console.log(`群号: ${id}`);
     console.log(`简介: ${info.finger_memo || "无"}`);
     console.log(`公告: ${info.group_memo}`);
     console.log(`人数: ${info.total}`);
@@ -90,11 +93,11 @@ actions.register("share", "down", download);
 async function download(flags) {
     const { group, all, dest } = flags;
     const path = dest ? utils_1.parsePath(dest) : undefined;
-    if (!group) {
+    const id = config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group;
+    if (!id) {
         console.log("Invalid selection!");
     }
-    const id = config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group;
-    const list = await group_1.getGroupShareList(config_json_1.select !== null && config_json_1.select !== void 0 ? config_json_1.select : group);
+    const list = await group_1.getGroupShareList(id);
     const multibar = new progress_1.MultiBar({
         hideCursor: true,
         format: progress_1.customFormatter

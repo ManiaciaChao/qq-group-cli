@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const os_1 = require("os");
 const url_1 = require("url");
+const fs_1 = require("fs");
 exports.sleep = (ms) => new Promise(resolve => setTimeout(() => {
     resolve();
 }, ms));
@@ -27,6 +28,11 @@ exports.parsePath = (path) => {
         splited[0] = os_1.homedir();
     }
     return path_1.join(...splited);
+};
+exports.mkdir = (path) => {
+    if (!fs_1.existsSync(path)) {
+        fs_1.mkdirSync(path, { recursive: true });
+    }
 };
 exports.percentage = (num) => (num * 100).toFixed(1) + "%";
 exports.paginate = (list, config) => {
