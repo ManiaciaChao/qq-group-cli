@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import { writeFileSync } from "fs";
 import config from "../config.json";
 
 const location = join(__dirname, "../config.json");

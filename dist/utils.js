@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = require("path");
+const os_1 = require("os");
 const url_1 = require("url");
 exports.sleep = (ms) => new Promise(resolve => setTimeout(() => {
     resolve();
@@ -19,21 +21,51 @@ exports.parseJsonp = (jsonp, cbName) => {
     const obj = JSON.parse(str);
     return obj.data ? obj.data : obj;
 };
-exports.percentage = (num) => (num * 100).toFixed(1) + "%";
-exports.pager = (list, config) => {
-    var _a, _b;
-    if (config === null || config === void 0 ? void 0 : config.all) {
-        return list;
+exports.parsePath = (path) => {
+    const splited = path.split(/[\\/]/g);
+    if (splited[0] === "~") {
+        splited[0] = os_1.homedir();
     }
-    else {
-        const size = (_a = config.size) !== null && _a !== void 0 ? _a : 10;
-        const page = (_b = config.page) !== null && _b !== void 0 ? _b : 1;
+    return path_1.join(...splited);
+};
+exports.percentage = (num) => (num * 100).toFixed(1) + "%";
+exports.paginate = (list, config) => {
+    let paginated = list;
+    const size = config.size;
+    const page = config.page;
+    if (!(config === null || config === void 0 ? void 0 : config.all)) {
         let start = (page - 1) * size;
         if (start >= list.length) {
             start = list.length - size;
         }
-        return list.slice(start, start + size);
+        paginated = list.slice(start, start + size);
     }
+    const pager = () => console.log(`total: ${paginated.length}  page: ${page}/${1 +
+        Math.floor(paginated.length / size)}`);
+    return { paginated, pager };
 };
+exports.lowerIncludes = (s, d) => s.toLowerCase().includes(d.toLocaleLowerCase());
 exports.time = (timestamp) => new Date(timestamp * 1000).toLocaleString();
 exports.numPad = (num, pad) => num.toString().padEnd(4);
+function strToNums(str, set = false) {
+    const res = new Set();
+    str.split(",").forEach(part => {
+        let ex = false;
+        if (part.startsWith("^")) {
+            ex = true;
+            part = part.substr(1);
+        }
+        if (part.includes("-")) {
+            const [start, end] = part.split("-").map(s => parseInt(s));
+            for (let n = start; n <= end; n++) {
+                ex ? res.delete(n) : res.add(n);
+            }
+        }
+        else {
+            const n = parseInt(part);
+            ex ? res.delete(n) : res.add(n);
+        }
+    });
+    return set ? res : [...res];
+}
+exports.strToNums = strToNums;

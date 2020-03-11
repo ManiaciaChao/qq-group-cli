@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../utils");
-const token_1 = require("./token");
 const fetch_1 = require("./fetch");
+const token_1 = require("./token");
+const utils_1 = require("../utils");
 exports.getGroupsList = async () => {
     const resp = await fetch_1.fetch(utils_1.withQuery("http://qun.qzone.qq.com/cgi-bin/get_group_list", {
         random: Math.random(),

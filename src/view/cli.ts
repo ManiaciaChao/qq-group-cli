@@ -31,18 +31,36 @@ export const cli = meow(
       all: {
         type: "boolean",
         alias: "a",
+        default: false
       },
       page: {
         type: "number",
-        alias: "p"
+        alias: "p",
+        default: 1
+      },
+      size: {
+        type: "number",
+        default: 10
       },
       group: {
         type: "number",
         alias: "g"
       },
       index: {
-        type: "number",
+        type: "string",
         alias: "i"
+      },
+      type: {
+        type: "string",
+        alias: "t"
+      },
+      name: {
+        type: "string",
+        alias: "n"
+      },
+      dest: {
+        type: "string",
+        alias: "d"
       }
     }
   }

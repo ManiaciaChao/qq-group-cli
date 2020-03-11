@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../utils");
 const cookies_1 = require("../model/cookies");
+const utils_1 = require("../utils");
 exports.getACSRFToken = function () {
     var _DJB = function (e) {
         var t = 5381;

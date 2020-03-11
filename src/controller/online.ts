@@ -1,9 +1,13 @@
-import { jar } from "../model/cookies";
-import { withQuery, parseJsonp } from "../utils";
-import { getACSRFToken } from "./token";
 import { fetch, login } from "./fetch";
+import { jar } from "../model/cookies";
+import { getACSRFToken } from "./token";
+import { withQuery, parseJsonp } from "../utils";
 
-const isOnline = async (cb?: (nick: string) => void) => {
+type isOnlineCallback = ((nick: string) => void) ;
+
+const logger: isOnlineCallback = nick => console.log(`${nick} already online.`);
+
+const isOnline = async (cb?: isOnlineCallback) => {
   if (!jar.getCookieStringSync("http://qun.qzone.qq.com")) {
     return false;
   }
@@ -19,19 +23,20 @@ const isOnline = async (cb?: (nick: string) => void) => {
   );
   const text = await resp.text();
   const data = parseJsonp(text, callbackFun);
-  console.log(data);
-  if (data?.code != 0) {
+  // console.log(data);
+  if (data.nick) {
+    cb && cb(data.nick);
+    return true;
+  } else {
     return false;
   }
-  cb && cb(data.nick);
-  return true;
 };
 
-export const ensureOnline = async () => {
-  const check = () => isOnline(nick => console.log(`${nick} already online.`));
+export const ensureOnline = async (cb = logger) => {
+  const check = () => isOnline(cb);
   let online = await check();
   while (!online) {
-    console.log("need login!");
+    console.log("Need login!");
     await login();
     online = await check();
   }

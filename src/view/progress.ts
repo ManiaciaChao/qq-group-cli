@@ -1,96 +1,88 @@
-import OriginProgressBar from "progress";
-import { Stream } from "stream";
-import { WriteStream } from "tty";
 import prettyBytes from "pretty-bytes";
+import { green, yellow, grey, red } from "chalk";
+import {
+  SingleBar as OriginSingleBar,
+  MultiBar as OriginMultiBar,
+  Options as OriginOptions,
+  Preset,
+} from "cli-progress";
 
-export default class ProgressBar extends OriginProgressBar {
-  tokens: any;
-  stream: WriteStream = process.stderr;
-  lastRender = -Infinity;
-  renderThrottle = 0;
-  start = Date.now();
-  width: number;
-  fmt: string;
-  chars = {
-    complete: "=",
-    incomplete: "-",
-    head: "="
-  };
-  lastDraw = "";
-  constructor(format: string, options: ProgressBar.ProgressBarOptions) {
-    super(format, options);
-    this.fmt = format;
-    this.width = options.width || this.total;
-    this.chars = { ...this.chars, ...options };
-  }
-  render(tokens?: any, force?: any) {
-    force = force !== undefined ? force : false;
-    if (tokens) this.tokens = tokens;
+type formatter = (options: Options, params: Params, payload: any) => string;
 
-    if (!this.stream.isTTY) return;
+interface Options extends Omit<OriginOptions, "format"> {
+  format?: string | formatter;
+  barGlue?: string;
+}
 
-    var now = Date.now();
-    var delta = now - this.lastRender;
-    if (!force && delta < this.renderThrottle) {
-      return;
-    } else {
-      this.lastRender = now;
-    }
+interface Payload {
+  filename: string;
+}
 
-    var ratio = this.curr / this.total;
-    ratio = Math.min(Math.max(ratio, 0), 1);
+interface Params {
+  value: number;
+  total: number;
+  [key: string]: any;
+}
 
-    var percent = ratio * 100;
-    var incomplete, complete, completeLength;
-    var elapsed = Date.now() - this.start || 1;
-    var eta = percent == 100 ? 0 : elapsed * (this.total / this.curr - 1);
-    var rate = this.curr / (elapsed / 1000) || 0;
-    /* populate the bar template with percentages and timestamps */
-    var str = this.fmt
-      .replace(":current", prettyBytes(this.curr))
-      .replace(":total", prettyBytes(this.total))
-      .replace(":elapsed", isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1))
-      .replace(
-        ":eta",
-        isNaN(eta) || !isFinite(eta) ? "0.0" : (eta / 1000).toFixed(1)
-      )
-      .replace(":percent", `${percent.toFixed(1)}%`.padStart(6))
-      .replace(":rate", prettyBytes(rate));
-
-    /* compute the available space (non-zero) for the bar */
-    var availableSpace = Math.max(
-      0,
-      this.stream.columns - str.replace(":bar", "").length
-    );
-    if (availableSpace && process.platform === "win32") {
-      availableSpace = availableSpace - 1;
-    }
-
-    var width = Math.min(this.width, availableSpace);
-
-    /* TODO: the following assumes the user has one ':bar' token */
-    completeLength = Math.round(width * ratio);
-    complete = Array(Math.max(0, completeLength + 1)).join(this.chars.complete);
-    incomplete = Array(Math.max(0, width - completeLength + 1)).join(
-      this.chars.incomplete
-    );
-
-    /* add head to the complete string */
-    if (completeLength > 0) complete = complete.slice(0, -1) + this.chars.head;
-
-    /* fill in the actual progress bar */
-    str = str.replace(":bar", complete + incomplete);
-
-    /* replace the extra tokens */
-    if (this.tokens)
-      for (var key in this.tokens)
-        str = str.replace(":" + key, this.tokens[key]);
-
-    if (this.lastDraw !== str) {
-      this.stream.cursorTo(0);
-      this.stream.write(str);
-      this.stream.clearLine(1);
-      this.lastDraw = str;
-    }
+export class MultiBar extends OriginMultiBar {
+  constructor(opt: Options, preset?: Preset) {
+    super(opt as OriginOptions, preset);
   }
 }
+
+export class SingleBar extends OriginSingleBar {
+  constructor(opt: Options, preset?: Preset) {
+    super(opt as OriginOptions, preset);
+  }
+}
+
+const color = (progress: number) => (str: string) => {
+  if (progress <= 0.2) return red(str);
+  if (progress <= 0.6) return yellow(str);
+  return green(str);
+};
+
+// format bar
+const formatBar = (progress: number, options: Options) => {
+  // calculate barsize
+  // const {barsize,barCompleteString,barIncompleteString} = options;
+  const barsize = options.barsize ?? 40;
+  const barCompleteString = options.barCompleteString ?? "=";
+  const barIncompleteString = options.barIncompleteString ?? " ";
+  const barGlue = options.barGlue ?? ">";
+  const completeSize = Math.round(progress * barsize);
+  const incompleteSize = barsize - completeSize;
+
+  // generate bar string by stripping the pre-rendered strings
+  return (
+    color(progress)(barCompleteString.substr(0, completeSize) + barGlue) +
+    barIncompleteString.substr(0, incompleteSize)
+  );
+};
+
+const formatFilename = (filename: string) =>
+  filename.length <= 20
+    ? filename
+    : filename.substr(0, 7) +
+      "......" +
+      filename.substr(filename.length - 7, 7);
+
+export const customFormatter: formatter = (
+  options,
+  params,
+  payload: Payload
+) => {
+  const { progress, startTime } = params;
+  const percentage = color(progress)(
+    (progress * 100).toFixed(1).padStart(5) + "%"
+  );
+  const elapsedTime = Math.round((Date.now() - startTime) / 1000);
+  const bar = formatBar(progress, options);
+  const value = prettyBytes(params.value);
+  const total = grey(prettyBytes(params.total));
+  const filename: string = yellow(
+    formatFilename(payload.filename ?? "").padEnd(20)
+  );
+
+  return `${filename}\t[${bar}] ${percentage} [${value}/${total}]`;
+};

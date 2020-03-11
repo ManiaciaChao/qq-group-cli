@@ -142,7 +142,7 @@ chalk@^3.0.0:
 
 cli-progress@^3.6.0:
   version "3.6.0"
-  resolved "https://registry.npm.taobao.org/cli-progress/download/cli-progress-3.6.0.tgz#20317e6a653c3e5636fb5f03a7d67cd48ebc215a"
+  resolved "https://registry.npm.taobao.org/cli-progress/download/cli-progress-3.6.0.tgz?cache=0&sync_timestamp=1579953155881&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcli-progress%2Fdownload%2Fcli-progress-3.6.0.tgz#20317e6a653c3e5636fb5f03a7d67cd48ebc215a"
   integrity sha1-IDF+amU8PlY2+18Dp9Z81I68IVo=
   dependencies:
     colors "^1.1.2"
@@ -442,8 +442,9 @@ punycode@^2.1.1:
   resolved "https://registry.npm.taobao.org/punycode/download/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha1-tYsBCsQMIsVldhbI0sLALHv0eew=
 
-"qq-qr-login@file:../qq-qr-login":
+qq-qr-login@ManiaciaChao/qq-qr-login:
   version "1.0.0"
+  resolved "https://codeload.github.com/ManiaciaChao/qq-qr-login/tar.gz/47bfd3cb79f7a539a0c12c2a2a8b0d2f99b4824c"
   dependencies:
     "@types/tough-cookie" "^2.3.6"
     fetch-cookie "^0.7.3"

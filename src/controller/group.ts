@@ -1,9 +1,7 @@
-import { jar } from "../model/cookies";
-import { withQuery, parseJsonp } from "../utils";
-import { getACSRFToken } from "./token";
 import { fetch } from "./fetch";
-import { createWriteStream, PathLike } from "fs";
-import path, { join } from "path";
+import { getACSRFToken } from "./token";
+import { withQuery, parseJsonp } from "../utils";
+
 interface IRespGroup {
   auth: number;
   flag: number;

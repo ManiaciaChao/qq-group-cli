@@ -1,5 +1,5 @@
-import { getCookieValue } from "../utils";
 import { jar } from "../model/cookies";
+import { getCookieValue } from "../utils";
 
 export const getACSRFToken = function() {
   var _DJB = function(e: string) {

@@ -2,29 +2,30 @@ import { Flags } from "../view/cli";
 
 export class ActionsRegistry {
   private flags: Flags;
-  private registry = new Map<string, Map<string, Function>>();
+  private registry = new Map<string, Map<string, ActionItem>>();
+
   constructor(flags: Flags) {
     this.flags = flags;
   }
-  register(command: string, subcommand: string, action: Action) {
+  register(command: string, subcommand: string, action: Action, detail?: any) {
     if (!this.registry.has(command)) {
       this.registry.set(command, new Map());
     }
     const cmd = this.registry.get(command);
     if (!cmd?.has(subcommand)) {
-      cmd?.set(subcommand, action);
+      cmd?.set(subcommand, { action, ...detail });
     }
   }
-  // parse(inputs: string[]) {
-  //   const [command, subcommand] = inputs;
-  //   const action = this.registry.get(command)?.get(subcommand);
-  //   action && action(this.cli);
-  // }
+
   parse(strings: string[]) {
     const [command, subcommand] = strings;
-    const action = this.registry.get(command)?.get(subcommand);
-    action && action(this.flags);
+    const item = this.registry.get(command)?.get(subcommand);
+    return item;
   }
 }
 
-export type Action = (cli: Flags) => any;
+interface ActionItem {
+  action: Action;
+  [key: string]: any;
+}
+export type Action = (cli: Flags) => void;

@@ -4,19 +4,11 @@ import FileCookieStore from "tough-cookie-file-store";
 export const store = new FileCookieStore("./cookie.json");
 export const jar = new CookieJar(store);
 
-export const cleanCookies = async () => {
-  store.idx;
+export const cleanCookies = () => {
   const tasks = [] as Promise<void>[];
   for (const [domain, paths] of Object.entries(store.idx)) {
     for (const path of Object.keys(paths)) {
-      tasks.push(
-        new Promise((resolve, reject) =>
-          store.removeCookies(domain, path, err =>
-            err ? reject(err) : resolve()
-          )
-        )
-      );
+      store.removeCookies(domain, path, err => {});
     }
   }
-  await Promise.all(tasks);
 };
