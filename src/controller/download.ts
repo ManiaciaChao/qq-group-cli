@@ -1,7 +1,7 @@
 import { join, normalize } from "path";
 import { createWriteStream } from "fs";
 import { fetch } from "./fetch";
-import { mkdir } from "../utils";
+import { mkdir, parsePath } from "../utils";
 import { downloadDir } from "../config.json";
 import { getGroupShareUrl, IGroupShare } from "./group";
 
@@ -14,8 +14,8 @@ export const downloadFile = async (config: {
   onData?: (chunk: Chunk) => void;
 }) => {
   const { id, path, share, onData } = config;
-  const finalPath =
-    path ?? join(normalize(__dirname + "/../../" + downloadDir), id.toString());
+  const finalPath = path ?? join(parsePath(downloadDir), id.toString());
+  console.log(finalPath)
   mkdir(finalPath);
   const filepath = join(finalPath, share.filename);
   const file = createWriteStream(filepath);

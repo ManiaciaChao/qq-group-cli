@@ -1,5 +1,5 @@
 {
-  "downloadDir": "./download",
+  "downloadDir": "~/Downloads",
   "select": null,
   "site": {
     "appid": "549000912",

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { cli } from "./view/cli";
 import actions from "./controller/commands";
 import { ensureOnline } from "./controller/online";

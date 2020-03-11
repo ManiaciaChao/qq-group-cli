@@ -60,13 +60,6 @@
   dependencies:
     pretty-bytes "*"
 
-"@types/progress@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.npm.taobao.org/@types/progress/download/@types/progress-2.0.3.tgz#7ccbd9c6d4d601319126c469e73b5bb90dfc8ccc"
-  integrity sha1-fMvZxtTWATGRJsRp5ztbuQ38jMw=
-  dependencies:
-    "@types/node" "*"
-
 "@types/tough-cookie-file-store@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/@types/tough-cookie-file-store/download/@types/tough-cookie-file-store-1.2.0.tgz#4b71901ebad4c3af10685b8d6be11eab39e61977"
@@ -426,11 +419,6 @@ pretty-bytes@*, pretty-bytes@^5.3.0:
   version "5.3.0"
   resolved "https://registry.npm.taobao.org/pretty-bytes/download/pretty-bytes-5.3.0.tgz#f2849e27db79fb4d6cfe24764fc4134f165989f2"
   integrity sha1-8oSeJ9t5+01s/iR2T8QTTxZZifI=
-
-progress@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npm.taobao.org/progress/download/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
-  integrity sha1-foz42PW48jnBvGi+tOt4Vn1XLvg=
 
 psl@^1.1.28:
   version "1.7.0"
