@@ -1,6 +1,6 @@
 {
   "name": "qq-group-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool to download files from QQ groups. 用于下载QQ群文件的命令行工具。",
   "author": {
     "name": "maniacata"
