@@ -28,10 +28,9 @@
     "tough-cookie-file-store": "^1.2.0"
   },
   "devDependencies": {
+    "@types/cli-progress": "^3.4.2",
     "@types/node": "^13.9.0",
     "@types/node-fetch": "^2.5.5",
-    "@types/cli-progress": "^3.4.2",
-    "@types/pretty-bytes": "^5.2.0",
     "@types/tough-cookie-file-store": "^1.2.0"
   }
 }

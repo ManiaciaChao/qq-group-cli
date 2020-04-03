@@ -1,7 +1,7 @@
 import { extname } from "path";
 import prettyBytes from "pretty-bytes";
 import { green, yellow, grey } from "chalk";
-
+import { open } from "./open";
 import { set } from "../model/config";
 import { select } from "../config.json";
 import { cli, Flags } from "../view/cli";
@@ -27,7 +27,9 @@ import { login } from "./fetch";
 
 const actions = new ActionsRegistry(cli.flags);
 
-actions.register("user", "login", () => login(), { withoutLogin: true });
+actions.register("user", "login", () => login({ before: open }), {
+  withoutLogin: true
+});
 actions.register(
   "user",
   "logout",

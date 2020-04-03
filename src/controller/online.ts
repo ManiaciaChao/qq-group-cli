@@ -1,9 +1,10 @@
 import { fetch, login } from "./fetch";
 import { jar } from "../model/cookies";
+import { open } from "./open";
 import { getACSRFToken } from "./token";
 import { withQuery, parseJsonp } from "../utils";
 
-type isOnlineCallback = ((nick: string) => void) ;
+type isOnlineCallback = (nick: string) => void;
 
 const logger: isOnlineCallback = nick => console.log(`${nick} already online.`);
 
@@ -37,7 +38,7 @@ export const ensureOnline = async (cb = logger) => {
   let online = await check();
   while (!online) {
     console.log("Need login!");
-    await login();
+    await login({ before: open });
     online = await check();
   }
 };
